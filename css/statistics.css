@@ -1,0 +1,42 @@
+* {
+    font-family: Arial, serif;
+    font-weight: lighter;
+}
+
+body {
+    background: #3b4465;
+}
+
+.headerTitle {
+    color: #b2b2b2;
+}
+
+.headerNumber {
+    color: white;
+}
+
+.left-statistics {
+    position: fixed;
+    top: 50%;
+    left: 15%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.pageVisits {
+    padding-top: 30%;
+}
+
+.totalNotes {
+    padding-top: 30%;
+}
+
+#statisticsChart {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 120%;
+    max-width: 1000px;
+}

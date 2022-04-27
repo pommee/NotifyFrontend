@@ -3,6 +3,11 @@
     margin: 0;
 }
 
+body {
+    margin: 0;
+    font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+}
+
 #snackbar {
     visibility: hidden;
     min-width: 250px;
