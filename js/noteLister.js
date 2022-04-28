@@ -11,7 +11,7 @@ function fetchNotes() {
     headers: { 'Content-Type': 'application/json' },
   }).then(async res => {
     if (res.status === 200) {
-      data = await res.json();
+      let data = await res.json();
       listNotes(data);
     } else
       snackbar("Wrong password or email, or the account does not exist")
