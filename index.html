@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Notify</title>
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/styling.css">
 </head>
+
 <body onload="validateSession()">
 
-<h1>Index</h1>
+    <h1>Index</h1>
 
-<div id="snackbar"></div>
+    <section class="filter_section">
+        <div class="filter_container">
+            <h4 class="filter_header">Movie filters:</h4>
+            <div id="filter_buttons">
+                <button class="filter_button" id="g_rated">G-Rated</button>
+                <button class="filter_button" id="pg_7">PG 7</button>
+                <button class="filter_button" id="pg_11">PG 11</button>
+                <button class="filter_button" id="pg_15">PG 15</button>
+            </div>
+        </div>
 
-<script src="js/login.js"></script>
-<script src="js/generalFunctions.js"></script>
+    </section>
+
+    <section>
+        <h2>Current Movies: </h2>
+        <div class="movies">
+
+        </div>
+    </section>
+
+
+    <script src="js/login.js"></script>
+    <script src="js/generalFunctions.js"></script>
 </body>
+
 </html>

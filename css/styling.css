@@ -4,8 +4,13 @@
 }
 
 body {
+    background-color: #feff9c;
     margin: 0;
     font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+}
+
+h1 {
+    color: black;
 }
 
 #snackbar {
@@ -34,6 +39,7 @@ body {
         bottom: 0;
         opacity: 0;
     }
+
     to {
         bottom: 30px;
         opacity: 1;
@@ -45,6 +51,7 @@ body {
         bottom: 0;
         opacity: 0;
     }
+
     to {
         bottom: 30px;
         opacity: 1;
@@ -56,6 +63,7 @@ body {
         bottom: 30px;
         opacity: 1;
     }
+
     to {
         bottom: 0;
         opacity: 0;
@@ -67,6 +75,7 @@ body {
         bottom: 30px;
         opacity: 1;
     }
+
     to {
         bottom: 0;
         opacity: 0;
