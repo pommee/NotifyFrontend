@@ -6,7 +6,7 @@ var pg_15 = false;
 var movies = null;
 var data = null;
 function fetchNotes() {
-  fetch("https://notifykaffepause.herokuapp.com/api/users", {
+  fetch("https://notifykaffepause.herokuapp.com/api/users/", {
     method: "GET",
     headers: { 'Content-Type': 'application/json' },
   }).then(async res => {
@@ -34,7 +34,7 @@ function listNotes() {
       displayMovieCard(data[i].notes[j]);
     }
   }
-  // setupCardHandlers();
+  setupCardHandlers();
 }
 
 function displayMovieCard(note) {
@@ -48,9 +48,13 @@ function displayMovieCard(note) {
           <br>
     </div>
     <div class="movie_desc">
-      <p class="text">
+    <form>
+     <textarea id="body" rows="8" cols="50">
         ${note.body}
-      </p>
+     </textarea>
+    </form>
+  <br>
+  <input type="submit" id="saveButton" value="Save">
     </div>
   </div>
   <div class="blur_back background_img"></div>
@@ -59,22 +63,20 @@ function displayMovieCard(note) {
 
   document.querySelector('.movies').innerHTML += html;
 }
-/*
+
 function setupCardHandlers() {
 
   let cards = document.getElementsByClassName('movie_card');
-
   for (let card of cards) {
-    card.addEventListener('click', () => {
+    card.addEventListener('dblclick', () => {
       // Öppna movieInfo med hjälp av movieId variablen nedan
       movieId = card.id;
-      console.log(movieId)
-      history.pushState(null, null, '/movie-info');
-      router();
+      let text = document.getElementById("body").value;
+      console.log(text)
     });
   }
 }
-
+/*
 function setupFilterHandlers() {
   let buttons = document.getElementsByClassName('filter_button');
 

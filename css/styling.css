@@ -9,6 +9,10 @@ body {
     font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
 }
 
+textarea {
+    background-color: #feff9c;
+}
+
 h1 {
     color: black;
 }
