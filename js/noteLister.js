@@ -4,64 +4,52 @@ var pg_11 = false;
 var pg_15 = false;
 
 var movies = null;
-
+var data = null;
 function fetchNotes() {
   fetch("https://notifykaffepause.herokuapp.com/api/users", {
     method: "GET",
     headers: { 'Content-Type': 'application/json' },
   }).then(async res => {
     if (res.status === 200) {
-      let data = await res.json();
-      listNotes(data);
+      data = await res.json();
+      console.log("users fetched");
+      console.log(data);
+      console.log(data[0].notes[1].title)
+      console.log(data.length);
+      console.log(data[0].notes.length);
+      listNotes();
     } else
       snackbar("Wrong password or email, or the account does not exist")
   });
 }
 
-function listNotes(data) {
+fetchNotes();
 
-  if (movies === null) {
-    let rawData = await fetch('/api/movie');
-    // deserialize the json into a "live" data structure
-    movies = await rawData.json();
-    console.log('Movies fetched fom DB')
-  }
+function listNotes() {
 
   document.querySelector('.movies').innerHTML = '';
-  for (let movie of movies) {
-    if (!g_rated && !pg_7 && !pg_11 && !pg_15 || (g_rated && pg_7 && pg_11 && pg_15)) { // No filters used, display all movies
-      displayMovieCard(movie);
-    } else if (movie.ageGroup === 'PG 15' && pg_15) {
-      displayMovieCard(movie);
-    }
-    else if (movie.ageGroup === 'PG 11' && pg_11) {
-      displayMovieCard(movie);
-    }
-    else if (movie.ageGroup === 'PG 7' && pg_7) {
-      displayMovieCard(movie);
-    } else if (movie.ageGroup === 'G-rated' && g_rated) {
-      displayMovieCard(movie);
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[i].notes.length; j++) {
+      console.log(data[i].notes[j]);
+      displayMovieCard(data[i].notes[j]);
     }
   }
-  setupCardHandlers();
+  // setupCardHandlers();
 }
 
-function displayMovieCard(movie) {
+function displayMovieCard(note) {
 
   let html = `
-    <div class="movie_card" id="${movie.movieId}">
+    <div class="movie_card" id="${note.id}">
       <div class="info_section">
        <div class="movie_header">
-          <img class="poster" src="${movie.imageUrl}" />
-         <h1>${movie.title}</h1>
-         <h4>${movie.year}, ${movie.director}</h4>
-          <span class="length">${movie.length} min</span><span class="length">${movie.ageGroup}</span>
+         <h1>${note.title}</h1>
+         <h4>${note.created}, ${note.changed}</h4>
           <br>
-         <p class="genre">${movie.genre}</p>
     </div>
     <div class="movie_desc">
       <p class="text">
-        ${movie.description}
+        ${note.body}
       </p>
     </div>
   </div>
@@ -71,7 +59,7 @@ function displayMovieCard(movie) {
 
   document.querySelector('.movies').innerHTML += html;
 }
-
+/*
 function setupCardHandlers() {
 
   let cards = document.getElementsByClassName('movie_card');
@@ -121,4 +109,4 @@ function setupFilterHandlers() {
       listMovies();
     });
   }
-}
+}*/

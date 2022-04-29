@@ -1,0 +1,249 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,700,800");
+
+/* CSS FOR MOVIE CARDS ON MOVIES.HTML  */
+.movies {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.movie_card {
+  position: relative;
+  display: block;
+  width: 780;
+  height: 350px;
+  margin: 50px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  -webkit-box-shadow: 0px 0px 100px -45px rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 0px 100px -45px rgba(255, 255, 255, 0.5);
+  font-family: 'Montserrat', helvetica, arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.movie_card:hover {
+  -webkit-transform: scale(1.02);
+  transform: scale(1.02);
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.movie_card:hover {
+  -webkit-box-shadow: 0px 0px 120px -35px rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 0px 120px -35px rgba(255, 255, 255, 0.5);
+}
+
+.movie_card .info_section {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-blend-mode: multiply;
+  z-index: 2;
+  border-radius: 10px;
+}
+
+.movie_card .info_section .movie_header {
+  position: relative;
+  padding: 25px;
+  height: 40%;
+  overflow: hidden;
+}
+
+.movie_card .info_section .movie_header h1 {
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.movie_card .info_section .movie_header h4 {
+  color: #9ac7fa;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+  display: block;
+}
+
+.movie_card .info_section .movie_header .length {
+  display: inline-block;
+  margin-top: 10px;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.movie_card .info_section .movie_header .genre {
+  display: inline-block;
+  color: #cee4fd;
+  margin-top: 5px;
+  margin-left: 4px;
+  font-weight: bold;
+}
+
+.movie_card .info_section .movie_header .poster {
+  position: relative;
+  float: left;
+  margin-right: 20px;
+  height: 140px;
+  -webkit-box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.5);
+}
+
+.movie_card .info_section .movie_desc {
+  padding: 25px;
+  height: 50%;
+}
+
+.movie_card .info_section .movie_desc .text {
+  color: #cfd6e1;
+}
+
+.movie_card .blur_back {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  height: 100%;
+  right: 0;
+  background-size: cover;
+  border-radius: 11px;
+}
+
+@media screen and (min-width: 768px) {
+  .movie_header {
+    width: 60%;
+  }
+
+  .movie_desc {
+    width: 50%;
+  }
+
+  .info_section {
+    background: -webkit-gradient(linear, left top, right top, color-stop(50%, #111110), to(transparent));
+    background: linear-gradient(to right, #111110 50%, transparent 100%);
+  }
+
+  .blur_back {
+    width: 80%;
+    background-position: -100% 10% !important;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+  .movie_card {
+    width: 95%;
+    margin: 70px auto;
+    min-height: 350px;
+    height: auto;
+  }
+
+  .blur_back {
+    width: 100%;
+    background-position: 50% 50% !important;
+  }
+
+  .movie_header {
+    width: 100%;
+    margin-top: 85px;
+    padding: 10px !important;
+  }
+
+  .movie_header h1 {
+    font-size: 24px;
+  }
+
+  .movie_desc {
+    width: 90%;
+    padding: 10px !important;
+  }
+
+  .poster {
+    margin-right: 10px !important;
+  }
+
+  .movie_desc p {
+    width: fit-content;
+  }
+
+  .movie_desc h4 {
+    margin: 0;
+
+  }
+
+  .info_section {
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(50%, #141413), to(transparent));
+    background: linear-gradient(to top, #141413 50%, transparent 100%);
+    display: -ms-inline-grid;
+    display: inline-grid;
+  }
+
+  .filter_header {
+    font-size: 16px;
+  }
+
+  .filter_button {
+    font-size: 10px !important;
+  }
+
+}
+
+.background_img {
+  background: url("https://media.istockphoto.com/vectors/vector-illustrations-of-lined-paper-with-texture-vector-id165955232?k=20&m=165955232&s=612x612&w=0&h=DawaXK5A2p_qwsKmuad7xhbZYBXemDe55WPdprAV3po=");
+}
+
+/* CSS FOR FILTER-BOX AND BUTTONS*/
+.filter_container {
+  text-align: center;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.filter_header {
+  font-size: 20px;
+  margin: 0 0 10px 0;
+}
+
+.filter_buttons {
+  margin: 0;
+  padding: 0;
+  width: auto;
+}
+
+.filter_button {
+  align-items: center;
+  background: #f5f5f5;
+  border: 0 solid #E2E8F0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  color: #1A202C;
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 600;
+  height: 56px;
+  justify-content: center;
+  line-height: 24px;
+  overflow-wrap: break-word;
+  text-decoration: none;
+  width: 20%;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  padding: 2px 10px;
+  margin: 0;
+  font-family: 'Montserrat', helvetica, arial, sans-serif;
+}
+
+.filter_button:hover {
+  scale: 1.06;
+}
+
+.filter_button_active {
+  background-color: black;
+  color: white;
+}
