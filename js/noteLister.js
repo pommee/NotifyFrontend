@@ -12,11 +12,6 @@ function fetchNotes() {
   }).then(async res => {
     if (res.status === 200) {
       data = await res.json();
-      console.log("users fetched");
-      console.log(data);
-      console.log(data[0].notes[1].title)
-      console.log(data.length);
-      console.log(data[0].notes.length);
       listNotes();
     } else
       snackbar("Wrong password or email, or the account does not exist")
@@ -43,7 +38,7 @@ function displayMovieCard(note) {
     <div class="movie_card" id="${note.id}">
       <div class="info_section">
        <div class="movie_header">
-         <h1>${note.title}</h1>
+         <h1 id="title">${note.title}</h1>
          <h4>${note.created}, ${note.changed}</h4>
           <br>
     </div>
@@ -72,7 +67,9 @@ function setupCardHandlers() {
       // Öppna movieInfo med hjälp av movieId variablen nedan
       movieId = card.id;
       let text = document.getElementById("body").value;
-      console.log(text)
+      let title = document.getElementById("title").innerHTML;
+      console.log(text);
+      console.log(title);
     });
   }
 }
@@ -111,4 +108,22 @@ function setupFilterHandlers() {
       listMovies();
     });
   }
-}*/
+}
+
+ fetch("https://notifykaffepause.herokuapp.com/api/notes/" + movieId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: movieId,
+          title:
+        })
+      }).then(response => {
+        return response.json()
+      }).then(data =>
+        // this is the data we get after putting our data,
+        console.log(data)
+      );
+
+*/
