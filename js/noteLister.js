@@ -5,6 +5,9 @@ var pg_15 = false;
 
 var movies = null;
 var data = null;
+//let cookie = localStorage.getItem("cookie");
+//let user = JSON.parse(cookie).value;
+
 function fetchNotes() {
   fetch("https://notifykaffepause.herokuapp.com/api/users/", {
     method: "GET",
@@ -13,6 +16,8 @@ function fetchNotes() {
     if (res.status === 200) {
       data = await res.json();
       listNotes();
+      console.log(data[0].notes)
+      //console.log(user)
     } else
       snackbar("Wrong password or email, or the account does not exist")
   });
@@ -30,6 +35,8 @@ function listNotes() {
     }
   }
   setupCardHandlers();
+  const element = document.getElementById("myBtn");
+  element.addEventListener("click", createNote);
 }
 
 function displayMovieCard(note) {
@@ -62,17 +69,78 @@ function displayMovieCard(note) {
 function setupCardHandlers() {
 
   let cards = document.getElementsByClassName('movie_card');
+  let text = document.getElementById("body").value;
+
   for (let card of cards) {
     card.addEventListener('dblclick', () => {
       // Öppna movieInfo med hjälp av movieId variablen nedan
       movieId = card.id;
-      let text = document.getElementById("body").value;
-      let title = document.getElementById("title").innerHTML;
-      console.log(text);
-      console.log(title);
+      console.log(text)
     });
   }
 }
+
+
+function createNote() {
+  let today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  today = mm + '/' + dd + '/' + yyyy;
+  let html = `
+    <div class="movie_card" id="${data[0].notes.length + 1}">
+      <div class="info_section">
+       <div class="movie_header">
+       <form>  
+       <input type="text" id="title" name="Title" value='Untitled'><br>
+
+       </form>
+         <h4 id="created">${today}</h4>
+          <br>
+    </div>
+    <div class="movie_desc">
+    <form>
+     <textarea id="body" rows="8" cols="50">
+      
+     </textarea>
+    </form>
+  <br>
+  <input type="submit" id="saveButton" value="Save">
+    </div>
+  </div>
+  <div class="blur_back background_img"></div>
+</div>
+`
+
+  document.querySelector('.movies').innerHTML += html;
+  window.scrollTo(0, document.body.scrollHeight);
+
+  let newNote = {
+    id: data[0].notes.length + 1,
+    title: 'Untitled',
+    body: ' ',
+    created: today,
+    lastChange: null
+  }
+  /*
+    fetch("https://notifykaffepause.herokuapp.com/api/notes/" + movieId, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: movieId,
+        title:
+          })
+    }).then(response => {
+      return response.json()
+    }).then(data =>
+      // this is the data we get after putting our data,
+      console.log(data)
+    );
+  */
+}
+
 /*
 function setupFilterHandlers() {
   let buttons = document.getElementsByClassName('filter_button');
