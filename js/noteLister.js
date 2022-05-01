@@ -35,7 +35,10 @@ function listNotes() {
     }
   }
   setupCardHandlers();
-  const element = document.getElementById("myBtn");
+  const newNoteButton = document.getElementById("myBtn");
+  newNoteButton.addEventListener("click", createNote);
+
+  const element = document.getElementById("saveChanges");
   element.addEventListener("click", createNote);
 }
 
@@ -122,24 +125,25 @@ function createNote() {
     created: today,
     lastChange: null
   }
+  console.log(data[0].notes.length);
+  data[0].notes.push(newNote);
+  console.log(data[0].notes.length);
   /*
-    fetch("https://notifykaffepause.herokuapp.com/api/notes/" + movieId, {
-      method: 'PUT',
+    fetch("https://notifykaffepause.herokuapp.com/api/notes/" + user, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        id: movieId,
-        title:
-          })
+      body: JSON.stringify(newNote)
     }).then(response => {
       return response.json()
-    }).then(data =>
+    }).then(newNote =>
       // this is the data we get after putting our data,
-      console.log(data)
+      console.log(newNote)
     );
   */
 }
+
 
 /*
 function setupFilterHandlers() {
@@ -177,21 +181,5 @@ function setupFilterHandlers() {
     });
   }
 }
-
- fetch("https://notifykaffepause.herokuapp.com/api/notes/" + movieId, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          id: movieId,
-          title:
-        })
-      }).then(response => {
-        return response.json()
-      }).then(data =>
-        // this is the data we get after putting our data,
-        console.log(data)
-      );
 
 */
