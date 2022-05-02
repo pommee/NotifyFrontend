@@ -5,18 +5,19 @@ var pg_15 = false;
 
 var movies = null;
 var data = null;
+let user = 'dummy@gmail.com'
 //let cookie = localStorage.getItem("cookie");
 //let user = JSON.parse(cookie).value;
 
 function fetchNotes() {
-  fetch("https://notifykaffepause.herokuapp.com/api/users/", {
+  fetch("https://notifykaffepause.herokuapp.com/api/users/" + user, {
     method: "GET",
     headers: { 'Content-Type': 'application/json' },
   }).then(async res => {
     if (res.status === 200) {
       data = await res.json();
       listNotes();
-      console.log(data[0].notes)
+      console.log(data.notes)
       //console.log(user)
     } else
       snackbar("Wrong password or email, or the account does not exist")
@@ -28,13 +29,13 @@ fetchNotes();
 function listNotes() {
 
   document.querySelector('.movies').innerHTML = '';
-  for (let i = 0; i < data.length; i++) {
-    for (let j = 0; j < data[i].notes.length; j++) {
-      console.log(data[i].notes[j]);
-      displayMovieCard(data[i].notes[j]);
-    }
+
+  for (let j = 0; j < data.notes.length; j++) {
+    console.log(data.notes[j]);
+    displayMovieCard(data.notes[j]);
   }
-  setupCardHandlers();
+
+  // setupCardHandlers();
   const newNoteButton = document.getElementById("myBtn");
   newNoteButton.addEventListener("click", createNote);
 
@@ -91,7 +92,7 @@ function createNote() {
   var yyyy = today.getFullYear();
   today = mm + '/' + dd + '/' + yyyy;
   let html = `
-    <div class="movie_card" id="${data[0].notes.length + 1}">
+    <div class="movie_card" id="${data.notes.length + 1}">
       <div class="info_section">
        <div class="movie_header">
        <form>  
@@ -119,30 +120,32 @@ function createNote() {
   window.scrollTo(0, document.body.scrollHeight);
 
   let newNote = {
-    id: data[0].notes.length + 1,
+    id: data.notes.length + 1,
     title: 'Untitled',
-    body: ' ',
+    body: 'Test',
     created: today,
     lastChange: null
   }
-  console.log(data[0].notes.length);
-  data[0].notes.push(newNote);
-  console.log(data[0].notes.length);
-  /*
-    fetch("https://notifykaffepause.herokuapp.com/api/notes/" + user, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newNote)
-    }).then(response => {
-      return response.json()
-    }).then(newNote =>
-      // this is the data we get after putting our data,
-      console.log(newNote)
-    );
-  */
+  console.log(data.notes.length);
+  data.notes.push(newNote);
+  console.log(data.notes.length);
+
+  fetch("https://notifykaffepause.herokuapp.com/api/users/" + user + '/addNote', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newNote)
+  }).then(response => {
+    return response.json()
+  }).then(newNote =>
+    // this is the data we get after putting our data,
+    console.log(newNote)
+  );
+
 }
+
+
 
 
 /*
