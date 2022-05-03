@@ -4,7 +4,7 @@ function login() {
         "password": document.querySelector("#login-password").value
     };
 
-    fetch("http://localhost:8080/api/login", {
+    fetch("http://localhost:8080/api/login/", {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -14,7 +14,7 @@ function login() {
             console.log(data)
             localStorage.setItem("cookie", JSON.stringify(data));
             snackbar("Logged in!")
-            // Redirect user to index...
+            window.location.replace("../index.html");
         } else
             snackbar("Wrong password or email, or the account does not exist")
     });
