@@ -3,27 +3,33 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/notes.css">
     <title>Notify</title>
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/styling.css">
-    <link rel="stylesheet" href="css/notes.css">
 </head>
 
 <body onload="validateSession()">
 
-    <h1>Your Notes</h1>
-    <button id="myBtn">New note</button>
-    <button id="saveChanges">Save all changes</button>
+    <div class="notes" id="app">
+         <div class="notes__sidebar">
+                <button class="notes__add" type="button" id="addNoteButton">Add Note</button>
+                <input class="notes__filter" id="notes__filter" type="text" placeholder="Filter here...">
+                <div class="notes__list">
+                    <!-- Javascript will fill notes here-->
+                </div>
+            </div>
+            <div class="notes__preview">
+                <input class="notes__title" type="text" placeholder="Enter a title...">
+                <textarea class="notes__body">I am the notes body...</textarea>
+                <div class="button__holder">
+                    <botton class="notes__save" type="button" id="saveNoteButton">Update</botton>
+                    <botton class="notes__delete" type="button" id="deleteNoteButton">Delete</botton>
+                </div>
+                
+            </div> 
+    </div>
 
-    <section>
-        <div class="movies">
-
-        </div>
-    </section>
-
-    <script src="/js/noteLister.js"></script>
-    <script src="js/login.js"></script>
     <script src="js/generalFunctions.js"></script>
+    <script src="js/noteLister.js"></script>
 </body>
 
 </html>

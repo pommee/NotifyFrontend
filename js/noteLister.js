@@ -1,202 +1,184 @@
-var g_rated = false;
-var pg_7 = false;
-var pg_11 = false;
-var pg_15 = false;
+let cookie = localStorage.getItem("cookie");
+let user = JSON.parse(cookie).value;
 
-var movies = null;
-var data = null;
-let user = 'dummy@gmail.com'
-//let cookie = localStorage.getItem("cookie");
-//let user = JSON.parse(cookie).value;
+var userNotes = null; // Currently notes are locally stored in this array. Can be replaced with localStorage 
+var selectedNote = null;
+var filterValue = null;
 
-function fetchNotes() {
-  fetch("https://notifykaffepause.herokuapp.com/api/users/" + user, {
+async function fetchNotesFromUser() {
+  fetch("http://localhost:8080/api/users/" + user, {
     method: "GET",
     headers: { 'Content-Type': 'application/json' },
   }).then(async res => {
     if (res.status === 200) {
       data = await res.json();
-      listNotes();
+      userNotes = data.notes;
+      displayNotes(); // Once the notes are fetched, display them
     } else
-      snackbar("Wrong password or email, or the account does not exist")
+      snackbar("Couldn't fetch notes.")
   });
 }
 
-fetchNotes();
-
-function listNotes() {
-
-  document.querySelector('.movies').innerHTML = '';
-
-  for (let j = 0; j < data.notes.length; j++) {
-    displayMovieCard(data.notes[j]);
-  }
-
-  const newNoteButton = document.getElementById("myBtn");
-  newNoteButton.addEventListener("click", createNote);
-
-  const element = document.getElementById("saveChanges");
-  element.addEventListener("click", setupCardHandlers);
-}
-
-function displayMovieCard(note) {
-
-  let html = `
-    <div class="movie_card" id="${note.id}">
-      <div class="info_section">
-       <div class="movie_header">
-       <form>  
-       <input type="text" class"title_area" value='${note.title}'><br>
-       </form>
-         <h4>${note.created}</h4>
-          <br>
-    </div>
-    <div class="movie_desc">
-    <form>
-     <textarea id="body" rows="8" cols="50">
-        ${note.body}
-     </textarea>
-    </form>
-  <br>
-    </div>
-  </div>
-  <div class="blur_back background_img"></div>
-</div>
-`
-
-  document.querySelector('.movies').innerHTML += html;
-}
-
-function setupCardHandlers() {
-
-  let cards = document.getElementsByClassName('movie_card');
-  const bodys = document.getElementsByTagName('textarea');
-  const titles = document.getElementsByTagName('input');
-  const dates = document.getElementsByTagName('h4');
-
-  for (let i = 0; i <= bodys.length - 1; i++) {
-    let note = {
-      title: titles[i].value,
-      body: bodys[i].value,
-      created: dates[i].textContent,
-      lastChange: null
+function displayNotes() {
+  let notesToDisplay = [];
+  let html = "";
+  for (let i = 0; i < userNotes.length; i++) {
+    if (userNotes[i].title.includes(filterValue) || filterValue === null) { // Add notes that fit the filter to notesToDisplay array
+      notesToDisplay.push(userNotes[i]);
     }
-    updateId = cards[i].id;
-    jsonNote = JSON.stringify(note);
-    console.log(jsonNote);
+  }
+  for (let i = 0; i < notesToDisplay.length; i++) {
+    if (i === 0) { // Set first note as selected
+      html += `
+      <div class="notes__list-item notes__list-item--selected" id="${notesToDisplay[i].id}">
+        <div class="notes__small-title">${notesToDisplay[i].title}</div>
+        <div class="notes__small-body">${notesToDisplay[i].body}</div>
+        <div class="notes__small-updated">${notesToDisplay[i].lastChange}</div>
+      </div>
+      `
+      selectedNote = notesToDisplay[i];
+      populatePreviewWindow(selectedNote) // Show the first note in preview window by default
+    } else {
+      html += `
+      <div class="notes__list-item" id="${notesToDisplay[i].id}">
+        <div class="notes__small-title">${notesToDisplay[i].title}</div>
+        <div class="notes__small-body">${notesToDisplay[i].body}</div>
+        <div class="notes__small-updated">${notesToDisplay[i].lastChange}</div>
+      </div>
+      `
+    }
+  }
+  document.querySelector(".notes__list").innerHTML = html;
+  setupNoteClickFunctionalities(); // Once HTML is built, add listeners
+}
 
-    fetch("https://notifykaffepause.herokuapp.com/api/notes/" + updateId, {
-      method: 'PUT',
+function populatePreviewWindow(note) { // Displays selected note in preview window
+  titleArea = document.getElementsByClassName("notes__title")
+  bodyArea = document.getElementsByClassName("notes__body")
+  titleArea[0].value = note.title;
+  bodyArea[0].value = note.body;
+}
+
+function setupAddNoteFunctionality() { // Sets up eventlistener for add note button
+  document.getElementById("addNoteButton").addEventListener('click', () => {
+    let newNote = {
+      title: 'Untitled',
+      body: 'No body',
+      created: new Date(),
+      lastChange: new Date()
+    }
+    jsonData = JSON.stringify(newNote)
+    fetch("http://localhost:8080/api/users/" + user + '/addNote', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: jsonNote
-    }).then(response => {
-      return response.json()
-    })
+      body: jsonData
+    }).then(async response => {
+      if (response.status === 200) {
+        let data = await response.json()
+        userNotes.push(data.notes[data.notes.length - 1]);
+        displayNotes();
+      } else {
+        snackbar("Couldn't add note")
 
-  }
-
-}
-
-
-function createNote() {
-  let today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  var yyyy = today.getFullYear();
-  today = yyyy + '-' + mm + '-' + dd + 'T13:34:00';
-  let html = `
-    <div class="movie_card" id="${data.notes.length + 1}">
-      <div class="info_section">
-       <div class="movie_header">
-       <form>  
-       <input type="text" id="title" name="Title" value='Untitled'><br>
-
-       </form>
-         <h4 id="created">${today}</h4>
-          <br>
-    </div>
-    <div class="movie_desc">
-    <form>
-     <textarea id="body" rows="8" cols="50">
-      
-     </textarea>
-    </form>
-  <br>
-  <input type="submit" id="saveButton" value="Save">
-    </div>
-  </div>
-  <div class="blur_back background_img"></div>
-</div>
-`
-
-  document.querySelector('.movies').innerHTML += html;
-  window.scrollTo(0, document.body.scrollHeight);
-
-
-
-  //console.log(today);
-
-  let newNote = {
-    title: 'Untitled',
-    body: ' ',
-    created: today,
-    lastChange: null
-  }
-  data.notes.push(newNote);
-  jsonData = JSON.stringify(newNote)
-
-  fetch("https://notifykaffepause.herokuapp.com/api/users/" + user + '/addNote', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: jsonData
-  }).then(response => {
-    return response.json()
-  })
-
-}
-
-
-
-
-/*
-function setupFilterHandlers() {
-  let buttons = document.getElementsByClassName('filter_button');
-
-  for (let button of buttons) {
-    button.addEventListener('click', () => {
-      button.classList.toggle('filter_button_active');
-      if (button.id === 'g_rated') {
-        if (!g_rated) {
-          g_rated = true;
-        } else {
-          g_rated = false;
-        }
-      } else if (button.id === 'pg_7') {
-        if (!pg_7) {
-          pg_7 = true;
-        } else {
-          pg_7 = false;
-        }
-      } else if (button.id === 'pg_11') {
-        if (!pg_11) {
-          pg_11 = true;
-        } else {
-          pg_11 = false;
-        }
-      } else if (button.id === 'pg_15') {
-        if (!pg_15) {
-          pg_15 = true;
-        } else {
-          pg_15 = false;
-        }
       }
-      listMovies();
+    })
+  })
+}
+
+function setupNoteClickFunctionalities() { // Sets up listener that highlights and shows selected note in preview window
+  notes = document.getElementsByClassName("notes__list-item");
+  for (let note of notes) {
+    note.addEventListener('click', () => {
+      selectedNote = findNoteInArrayFromId(note.id)
+      populatePreviewWindow(selectedNote);
+      document.getElementsByClassName("notes__list-item--selected")[0].classList.remove("notes__list-item--selected")
+      note.classList.add("notes__list-item--selected")
     });
   }
 }
 
-*/
+function setupDeleteNoteFunctionality() { // Delete button listener that deletes currently selected note after prompt
+  document.getElementById("deleteNoteButton").addEventListener('click', () => {
+    console.log(selectedNote)
+    if (confirm("Delete note with id: " + selectedNote.id)) {
+      fetch("http://localhost:8080/api/notes/" + selectedNote.id, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: null
+      }).then(response => {
+        if (response.status === 200) {
+          indexToRemove = (userNotes.findIndex(note => {
+            return note.id === selectedNote.id
+          }))
+          userNotes.splice(indexToRemove, 1)
+          displayNotes();
+        } else {
+          console.log()
+        }
+      })
+    }
+  })
+}
+
+function setupUpdateNoteFunctionality() { // Updates the currently selected note
+  document.getElementById("saveNoteButton").addEventListener('click', () => {
+    if (confirm("Do you want to update this note to the current state?")) {
+      let newNote = {
+        title: titleArea = document.getElementsByClassName("notes__title")[0].value,
+        body: bodyArea = document.getElementsByClassName("notes__body")[0].value,
+        lastChange: new Date()
+      }
+      jsonData = JSON.stringify(newNote)
+      fetch("http://localhost:8080/api/notes/" + selectedNote.id, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonData
+      }).then(response => {
+        if (response.status === 200) {
+          indexToUpdate = userNotes.findIndex(note => {
+            return note.id === selectedNote.id
+          })
+          userNotes[indexToUpdate].title = newNote.title
+          userNotes[indexToUpdate].body = newNote.body
+          displayNotes();
+        } else {
+          console.log("ouch")
+        }
+      })
+    }
+  })
+}
+
+function setupFilterFunctionality() { // Input listener for filter field that updates filter variable used in displayNotes()
+  filterBox = document.getElementById("notes__filter");
+  filterBox.addEventListener('input', () => {
+    if (filterBox.value.length > 0) {
+      filterValue = filterBox.value;
+    } else {
+      filterValue = null;
+    }
+    displayNotes();
+  })
+}
+
+
+function findNoteInArrayFromId(id) { // Returns a note object from the array by passing id
+  for (let i = 0; i < userNotes.length; i++) {
+    if (userNotes[i].id == id) {
+      return userNotes[i]
+    }
+  }
+  return null;
+}
+// Below functions are only called on page refresh / load
+fetchNotesFromUser();
+setupAddNoteFunctionality();
+setupUpdateNoteFunctionality();
+setupDeleteNoteFunctionality();
+setupFilterFunctionality();
