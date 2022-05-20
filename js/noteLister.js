@@ -167,6 +167,28 @@ function setupFilterFunctionality() { // Input listener for filter field that up
   })
 }
 
+function setupLogoutButtonFunctionality() {
+  document.getElementsByClassName("logout__button")[0].addEventListener('click', () => {
+    let data = {
+      "cookie": localStorage.getItem("cookie")
+    };
+    console.log(data)
+    
+    fetch("http://localhost:8080/api/login/", {
+      method: "DELETE",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(async res => {
+      if (res.status === 200) {
+        //localStorage.clear();
+        window.location.replace("html/login.html");
+      } else
+        console.log("Error")
+    });
+    
+  });
+}
+
 
 function findNoteInArrayFromId(id) { // Returns a note object from the array by passing id
   for (let i = 0; i < userNotes.length; i++) {
@@ -182,3 +204,4 @@ setupAddNoteFunctionality();
 setupUpdateNoteFunctionality();
 setupDeleteNoteFunctionality();
 setupFilterFunctionality();
+setupLogoutButtonFunctionality();

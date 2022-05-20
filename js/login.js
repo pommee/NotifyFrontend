@@ -30,7 +30,7 @@ function register() {
             "password": password
         };
 
-        fetch("http://localhost:8080/api/login", {
+        fetch("http://localhost:8080/api/login/", {
             method: "PUT",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
@@ -40,7 +40,7 @@ function register() {
                 console.log(data)
                 localStorage.setItem("cookie", JSON.stringify(data));
                 snackbar("Logged in!")
-                // Redirect user to index...
+                window.location.replace("../index.html");
             } else
                 snackbar("Account already exists, try another email")
         });

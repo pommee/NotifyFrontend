@@ -128,6 +128,22 @@ padding: 0.4em 2em;
   text-align: right;
 }
 
+.logout__button {
+  background: #c02d00;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 10px 0 10px 0;
+    font-weight: bold;
+    border-radius: 7px;
+    text-align: center;
+    white-space: nowrap;
+    width: 8em;
+    float: right;
+    margin-bottom: 10px;
+}
+
 .notes__preview {
   display: flex;
   flex-direction: column;
