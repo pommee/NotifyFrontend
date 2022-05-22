@@ -18,6 +18,7 @@ function setData(data) {
 }
 
 fetchStatistics()
+setupBackButton()
 
 function setChart(totalUsers, visitorCount, totalNotes) {
     new Chart(document.querySelector("#statisticsChart"), {
@@ -53,5 +54,11 @@ function setChart(totalUsers, visitorCount, totalNotes) {
                 }
             }
         }
+    });
+}
+
+function setupBackButton() {
+    document.getElementsByClassName("back__button")[0].addEventListener('click', () => {
+        window.location.replace("../index.html");
     });
 }

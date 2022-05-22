@@ -144,6 +144,31 @@ padding: 0.4em 2em;
     margin-bottom: 10px;
 }
 
+.logout__button:hover {
+  background: #db4c21;
+}
+
+.statistics__button {
+background: #3f3039;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1.5em;
+  padding: 10px 0 10px 0;
+  font-weight: bold;
+  border-radius: 7px;
+  text-align: center;
+  white-space: nowrap;
+  width: 8em;
+  float: right;
+  margin-bottom: 10px;
+  margin-right: 5px;
+}
+
+.statistics__button:hover {
+background: #614d58;
+}
+
 .notes__preview {
   display: flex;
   flex-direction: column;

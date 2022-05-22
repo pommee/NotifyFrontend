@@ -189,6 +189,12 @@ function setupLogoutButtonFunctionality() {
   });
 }
 
+function setupStatisticsButtonFunctionality() {
+  document.getElementsByClassName("statistics__button")[0].addEventListener('click', () => {
+    window.location.replace("html/statistics.html")
+  });
+}
+
 
 function findNoteInArrayFromId(id) { // Returns a note object from the array by passing id
   for (let i = 0; i < userNotes.length; i++) {
@@ -205,3 +211,4 @@ setupUpdateNoteFunctionality();
 setupDeleteNoteFunctionality();
 setupFilterFunctionality();
 setupLogoutButtonFunctionality();
+setupStatisticsButtonFunctionality();
