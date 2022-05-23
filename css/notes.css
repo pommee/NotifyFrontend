@@ -63,12 +63,13 @@ cursor: pointer;
 font-size: 2em;
 font-weight: bold;
 padding: 0.4em 2em;
-width: 20%;
+  width: 150px;
 margin: 0 auto;
 border-radius: 7px;
 text-align: center;
 margin-top: 1em;
 white-space: nowrap;
+  display: inline-block;
 }
 
 .notes__save:hover {
@@ -88,11 +89,54 @@ padding: 0.4em 2em;
   text-align: center;
   margin-top: 1em;
   white-space: nowrap;
-  min-width: 600px;
+    display: inline-block;
+    width: 150px;
 }
 
 .notes__delete:hover {
   background: #db4c21;
+}
+
+.notes__save__offline {
+background: #63b963;
+  border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 0.4em 2em;
+    width: 150px;
+    margin: 0 auto;
+    border-radius: 7px;
+    text-align: center;
+    margin-top: 1em;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.notes__save__offline:hover {
+background-color: #74d674;
+}
+
+.notes__rem__offline {
+background: #9c0087;
+  border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 0.4em 2em;
+    width: 150px;
+    margin: 0 auto;
+    border-radius: 7px;
+    text-align: center;
+    margin-top: 1em;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.notes__rem__offline:hover {
+background: #c401aa;
 }
 
 .notes__list-item {

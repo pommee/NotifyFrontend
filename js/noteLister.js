@@ -1,22 +1,42 @@
-let cookie = localStorage.getItem("cookie");
-let user = JSON.parse(cookie).value;
+var user;
+var viewMode = false;
 
 var userNotes = null; // Currently notes are locally stored in this array. Can be replaced with localStorage 
 var selectedNote = null;
 var filterValue = null;
 
+var offlineNotes = null;
+
+function getLoggedInUser() {
+  let cookie = localStorage.getItem("cookie");
+  if (cookie === null) { // Noone is logged in, meaning View mode
+    viewMode = true;
+  } else {
+    user = JSON.parse(cookie).value
+  }
+}
+
 async function fetchNotesFromUser() {
-  fetch("http://localhost:8080/api/users/" + user, {
-    method: "GET",
-    headers: { 'Content-Type': 'application/json' },
-  }).then(async res => {
-    if (res.status === 200) {
-      data = await res.json();
-      userNotes = data.notes;
-      displayNotes(); // Once the notes are fetched, display them
-    } else
-      snackbar("Couldn't fetch notes.")
-  });
+  offlineNotes = JSON.parse(localStorage.getItem("offlineNotes"));
+  if (offlineNotes == null) offlineNotes = [];
+  console.log(offlineNotes)
+  if (!viewMode) {
+    fetch("http://localhost:8080/api/users/" + user, {
+      method: "GET",
+      headers: { 'Content-Type': 'application/json' },
+    }).then(async res => {
+      if (res.status === 200) {
+        data = await res.json();
+        userNotes = data.notes;
+        displayNotes(); // Once the notes are fetched, display them
+      } else
+        snackbar("Couldn't fetch notes.")
+    });
+  } else {
+    userNotes = JSON.parse(localStorage.getItem("offlineNotes"));
+    displayNotes();
+    disableButtons();
+  }
 }
 
 function displayNotes() {
@@ -169,30 +189,85 @@ function setupFilterFunctionality() { // Input listener for filter field that up
 
 function setupLogoutButtonFunctionality() {
   document.getElementsByClassName("logout__button")[0].addEventListener('click', () => {
-    let data = {
-      "cookie": localStorage.getItem("cookie")
-    };
-    console.log(data)
+    if (!viewMode) {
+      let data = {
+        "cookie": localStorage.getItem("cookie")
+      };
+      console.log(data)
     
-    fetch("http://localhost:8080/api/login/", {
-      method: "DELETE",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).then(async res => {
-      if (res.status === 200) {
-        //localStorage.clear();
-        window.location.replace("html/login.html");
-      } else
-        console.log("Error")
-    });
-    
+      fetch("http://localhost:8080/api/login/", {
+        method: "DELETE",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(async res => {
+        if (res.status === 200) {
+          localStorage.removeItem("cookie")
+          localStorage.removeItem("viewMode")
+          window.location.replace("html/login.html");
+        } else
+          console.log("Error")
+      });
+    } else {
+      localStorage.removeItem("viewMode")
+      window.location.replace("html/login.html");
+    }
   });
+  
 }
 
 function setupStatisticsButtonFunctionality() {
   document.getElementsByClassName("statistics__button")[0].addEventListener('click', () => {
     window.location.replace("html/statistics.html")
   });
+}
+
+function saveNoteOffline() {
+  document.getElementsByClassName("notes__save__offline")[0].addEventListener('click', () => {
+    if (offlineNotes.length > 0) {
+      for (let i = 0; i < offlineNotes.length; i++) {
+        if (offlineNotes[i].id === selectedNote.id) { // Check if already saved
+          return;
+        }
+      }
+    }  
+    offlineNotes.push(selectedNote);
+    localStorage.setItem("offlineNotes", JSON.stringify(offlineNotes))
+    console.log(localStorage.getItem("offlineNotes"))
+  });
+}
+
+function removeNoteOffline() {
+  document.getElementsByClassName("notes__rem__offline")[0].addEventListener('click', () => {
+    if (offlineNotes.length > 0) {
+      for (let i = 0; i < offlineNotes.length; i++) {
+        if (offlineNotes[i].id === selectedNote.id) {
+          indexToRemove = (offlineNotes.findIndex(note => {
+            return note.id === selectedNote.id
+          }))
+          offlineNotes.splice(indexToRemove, 1)
+          indexToRemove = (userNotes.findIndex(note => {
+            return note.id === selectedNote.id
+          }))
+          userNotes.splice(indexToRemove, 1)
+          localStorage.setItem("offlineNotes", JSON.stringify(offlineNotes))
+          console.log(offlineNotes)
+          if (viewMode) {
+            displayNotes();
+          }
+          return;
+        }
+      }
+    }
+  });
+}
+
+function disableButtons() {
+  document.getElementById("addNoteButton").style.display = 'none';
+  document.getElementsByClassName("statistics__button")[0].style.display = 'none';
+  document.getElementById("saveNoteButton").style.display = 'none';
+  document.getElementById("deleteNoteButton").style.display = 'none';
+  document.getElementsByClassName("notes__save__offline")[0].style.display = 'none';
+  //document.getElementsByClassName("notes__rem__offline")[0].style.display = 'none';
 }
 
 
@@ -205,10 +280,13 @@ function findNoteInArrayFromId(id) { // Returns a note object from the array by 
   return null;
 }
 // Below functions are only called on page refresh / load
+getLoggedInUser();
 fetchNotesFromUser();
 setupAddNoteFunctionality();
 setupUpdateNoteFunctionality();
 setupDeleteNoteFunctionality();
+saveNoteOffline();
+removeNoteOffline();
 setupFilterFunctionality();
 setupLogoutButtonFunctionality();
 setupStatisticsButtonFunctionality();

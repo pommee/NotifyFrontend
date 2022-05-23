@@ -49,6 +49,11 @@ function register() {
     }
 }
 
+function activateViewMode() {
+    localStorage.setItem("viewMode", true); // Set a global variable to activate viewMode
+    window.location.replace("../index.html")
+}
+
 const switchers = [...document.querySelectorAll('.switcher')]
 
 switchers.forEach(item => {
